@@ -14,13 +14,13 @@ A server is defined to be an instance of a web or application server containing 
 
 #### 1.3 Definition of File
 
-Files are the resources which produce the user interface. Files may be implemented in one of the following ways:
+Files are the server resources which produce the user interface. Files may be implemented on the server in one of the following ways:
 
 * Literal - files which exist on the server's file system and produce some aspect of the user interface.
 
 * Virtual - files which do not exist on the server's file system but produce some aspect of the user interface through a server side mechanism. For example, a Java Servlet or an Apache URL Rewrite that produces a JavaScript file for a given URL.
 
-* Wrappers - files which exist on the file system that include another file or server side resource via Server Side Includes (SSI) to produce some aspect of the user interface.  For example, a static JavaScript file which uses SSI to include a JSP, ASP, PHP, or any other dynamic resource that produces the content.
+* Wrappers - files which exist on the file system that simply include another file or server side resource via Server Side Includes (SSI) to produce some aspect of the user interface.  For example, a JavaScript file which  uses SSI to include a JSP, ASP, PHP, or any other dynamic resource to produce its content.
 
 ## 2.0 Requirements
 
@@ -30,7 +30,7 @@ The application directory structure is to be placed in the server document root 
 
 #### 2.2 Server Side Includes (SSI)
 
-The server must enable SSI for all files with a .html extension. As needed, SSI rules may be enabled for specific files with other extensions and should be limited to file wrappers only.
+The server must enable SSI for all files with a ".html" extension. As needed, SSI rules may be enabled for specific files with other extensions and should be limited to file wrappers only.
 
 For portability between PrezoServer implementations SSI must be configured relative the server's document root.
 
