@@ -30,7 +30,7 @@ Files are the server resources which define or control the user interface. Files
 
 #### 2.1 Document Root
 
-The document root directory should serve content for one application.
+The document root directory should serve content for only one application.
 
 #### 2.2 Server Side Includes (SSI)
 
