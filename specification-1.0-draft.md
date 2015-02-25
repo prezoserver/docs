@@ -34,7 +34,7 @@ The document root directory should serve content for only one application.
 
 #### 2.2 Server Side Includes (SSI)
 
-The server must enable SSI for all files with a ".html" extension. As needed, SSI rules may be enabled for specific files with other extensions and should be limited to file wrappers only.
+The server must enable SSI for all files with a ".html" extension. Additional SSI rules for other file extensions may be created per implementation in order to facilitate meeting the requirements of this specification.
 
 SSI must be configured to execute relative to the server's document root directory.
 
@@ -47,29 +47,33 @@ The application root document directory will contain a folder named "prezo". Thi
 
 The prezo folder will have the following subdirectories and files:
 
-/<document root>
-    /prezo
-        /fragments
-            base.html
-        /js
-            prezo.js
-            csrf.js
-    /support
-        /fragments
-        /js
-
+<pre>
+/
+|-- prezo/
+|---- fragments/
+|        |-- base.html
+|---- js/
+|      |-- prezo.js
+|      |-- csrf.js
+|---- support/
+|        |-- fragments/
+|        |-- js/
+</pre> 
+ 
 The following files may be implemented as literal, virtual, or wrapper files:
     /<document root>/prezo/fragments/base.html
     /<document root>/prezo/js/prezo.js
     /<document root>/prezo/js/csrf.js
+    
+Wrapped files are intended to be placed in the corresponding directory under support.
 
 Regardless of how the files are implemented the following URLs should result in an HTTP response with status code 200 (OK) when accessed by a client:
 
-http(s)://<server>:<port>/<document root>/prezo/fragments/base.html
-http(s)://<server>:<port>/<document root>/prezo/js/prezo.js
-http(s)://<server>:<port>/<document root>/prezo/js/csrf.js
+http(s)://\<server\>:\<port\>/\<document root\>/prezo/fragments/base.html  
+http(s)://\<server\>:\<port\>/\<document root\>/prezo/js/prezo.js  
+http(s)://\<server\>:\<port\>/\<document root\>/prezo/js/csrf.js  
 
-The directory /<document root>/prezo/support/ and any of its subdirectories and files should not be accessible from a client. Any attempt to access its subdirectories and files should result in an HTTP response with status code of 404 (Not Found).
+The directory /\<document root\>/prezo/support/ and any of its subdirectories and files should not be accessible from a client. Any attempt to access its subdirectories and files should result in an HTTP response with status code of 404 (Not Found).
 
 #### 2.4 base.html
 
@@ -101,4 +105,9 @@ prezo.application.DOCROOT = "**application/**";
 The csrf.js file exists as either a static, virtual, or wrapper file at /<document root>/prezo/js/csrf.js and is accessible by a client  accessing the URL http(s)://\<server\>:\<port\>/\<document root\>/prezo/js/csrf.js.
 
 The csrf.js file, when included by the client, is to override the XMLHttpRequest object and inject the appropriate server side CSRF variables into the XMLHttpRequest object. The client makes all requests to get or modify data through AJAX. When the request is processed by the presentation server (which is implemented with an application server technology) the server is able to determine if the request has the appropriate CSRF variables and either allow or reject the AJAX request. If the server detects a potential CSRF issue it should return a response body containing "Potential CSRF Attack Detected" with a HTTP status code of 417 to represent this condition. The client, upon detecting the status code, may display appropriate guidance to the user.
+
+The following sequence diagram illustrates the intended CSRF protection process for a PrezoServer.
+
+![PrezoServer CSRF Process](PrezoServer-CSRF.png)
+
 
