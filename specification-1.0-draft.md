@@ -50,14 +50,14 @@ The prezo folder will have the following subdirectories and files:
 <pre>
 /
 |-- prezo/
-|---- fragments/
-|        |-- base.html
-|---- js/
-|      |-- prezo.js
-|      |-- csrf.js
-|---- support/
-|        |-- fragments/
-|        |-- js/
+|     |-- fragments/
+|     |    |-- base.html
+|     |-- js/
+|     |    |-- prezo.js
+|     |    |-- csrf.js
+|     |-- support/
+|     |    |-- fragments/
+|     |    |-- js/
 </pre> 
  
 The following files may be implemented as literal, virtual, or wrapper files:
