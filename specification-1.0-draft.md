@@ -60,6 +60,7 @@ The prezo folder will have, at minimum, the following sub-directories and files:
 |     |    |-- prezo.js
 |     |    |-- csrf.js
 |     |-- support/
+|     |    |-- docs/
 |     |    |-- fragments/
 |     |    |-- js/
 </pre> 
@@ -118,7 +119,7 @@ A new installation of PrezoServer must provide certain files which support testi
 
 #### 2.7.1 Validating client access restrictions to /prezo/support
 
-A literal file named resource-test.html must be placed in /prezo/support/reference/. Per requirements defined in 2.3, any resources under /prezo/support should not be accessible by the client. This is validated by making an attempt to access http(s)://\<server\>:\<port\>/\<document root\>/prezo/support/reference/resource-test.html. Success is the content is not returned and the HTTP response code was a 404 (Not Found). Failure is the content was returned and the HTTP response code was 200 (OK).
+A literal file named test-resource.html must be placed in /prezo/support/reference/. Per requirements defined in 2.3, any resources under /prezo/support should not be accessible by the client. This is validated by making an attempt to access http(s)://\<server\>:\<port\>/\<document root\>/prezo/support/reference/test-resource.html. Success is the content is not returned and the HTTP response code was a 404 (Not Found). Failure is the content was returned and the HTTP response code was 200 (OK).
 
 The content of this file should indicate that if it can be read then the PrezoServer has not properly implemented the requirements of this specification.
 
@@ -127,9 +128,9 @@ Note: While this does not necessarily prove all resources under /prezo/support h
 #### 2.7.2 Validating CSRF Protection
 
 The following resource must exist and may be implemented as a literal, virtual, or wrapper file:
-/<document root>/api/csrf-test.html
+/<document root>/api/test-csrf.html
 
-This file should be accessible to the client. If csrf.js was included by the client then the content of csrf-test.html should be accessible by the client. If the client has not included csrf.js then the appropriate response status code and message should be returned as described in 2.6. 
+This file should be accessible to the client. If csrf.js was included by the client then the content of test-csrf.html should be accessible by the client. If the client has not included csrf.js then the appropriate response status code and message should be returned as described in 2.6. 
 
 #### 2.8 Design Documentation
 
@@ -138,6 +139,7 @@ To be considered 100% compliant each PrezoServer implementation must provide des
 1. Step by step procedure for creating the PrezoServer implementation so that it can be reproduced and verified.
 2. Detailed description of how CSRF was implemented. 
     
+The documentation should exist in /prezo/support/docs as described in 2.3.
 
 
 
