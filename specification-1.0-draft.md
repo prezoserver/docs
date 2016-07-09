@@ -26,6 +26,8 @@ Files are the server resources which define or control the user interface. Files
 
 * Wrappers - files which exist on the file system which defer producing some aspect of the user interface to another file or server side resource via Server Side Includes (SSI).  For example, a JavaScript file which uses SSI to include another file (e.g. a PHP, JSP, ASP, or other dynamically processed file) to produce its content.
 
+Note: The intention of this framework is that virtual and wrapper based files are used for implementing the requirements specified in section 2.0 and not for the core content. The core content of the application should be implemented using pure HTML, CSS, and JavaScript resources. Doing so allows for the core content to be moved across implementations without change.
+
 ## 2.0 Requirements
 
 #### 2.1 Document Root
@@ -42,10 +44,12 @@ The only SSI directive that is to be used within an application is the include d
 
 <!--#include virtual="/<directory>/<file>" -->
 
+This ensures compatibility for the HTML content across implementations. 
+
 #### 2.3 Directory Structure
 The application root document directory will contain a folder named "prezo". This directory contains the implementation specific files required to meet this specification.  Actual application content should not be placed in this directory.  When packaging an application to deploy on another PrezoServer implementation the prezo directory should not be included. 
 
-The prezo folder will have the following subdirectories and files:
+The prezo folder will have, at minimum, the following sub-directories and files:
 
 <pre>
 /
@@ -73,7 +77,7 @@ http(s)://\<server\>:\<port\>/\<document root\>/prezo/fragments/base.html
 http(s)://\<server\>:\<port\>/\<document root\>/prezo/js/prezo.js  
 http(s)://\<server\>:\<port\>/\<document root\>/prezo/js/csrf.js  
 
-The directory /\<document root\>/prezo/support/ and any of its subdirectories and files should not be accessible from a client. Any attempt to access its subdirectories and files should result in an HTTP response with status code of 404 (Not Found).
+The directory /\<document root\>/prezo/support/ and any of its sub-directories and files should not be accessible from a client. Any attempt to access its sub-directories and files should result in an HTTP response with status code of 404 (Not Found).
 
 #### 2.4 base.html
 
@@ -102,12 +106,40 @@ prezo.application.DOCROOT = "**application/**";
 
 #### 2.6 csrf.js
 
-The csrf.js file exists as either a static, virtual, or wrapper file at /<document root>/prezo/js/csrf.js and is accessible by a client  accessing the URL http(s)://\<server\>:\<port\>/\<document root\>/prezo/js/csrf.js.
+The csrf.js file exists as either a static, virtual, or wrapper file at /<document root>/prezo/js/csrf.js and is accessible by a client accessing the URL http(s)://\<server\>:\<port\>/\<document root\>/prezo/js/csrf.js.
 
-The csrf.js file, when included by the client, is to override the XMLHttpRequest object and inject the appropriate server side CSRF variables into the XMLHttpRequest object. The client makes all requests to get or modify data through AJAX. When the request is processed by the presentation server (which is implemented with an application server technology) the server is able to determine if the request has the appropriate CSRF variables and either allow or reject the AJAX request. If the server detects a potential CSRF issue it should return a response body containing "Potential CSRF Attack Detected" with a HTTP status code of 417 to represent this condition. The client, upon detecting the status code, may display appropriate guidance to the user.
+There are several ways to implement a CSRF solution and it is left to each PrezoServer implementation to determine the best way to manage CSRF protection. The only stipulation being that the csrf.js file, when included by the client, is how CSRF protection is enabled. 
 
-The following sequence diagram illustrates the intended CSRF protection process for a PrezoServer.
+The client makes all requests to get or modify data through AJAX. When the request is processed by the presentation server (which is implemented with an application server technology) the server is able to determine if the request has the appropriate CSRF variables and either allow or reject the AJAX request. If the server detects a potential CSRF issue it should return a response body containing "Potential CSRF Attack Detected" with a HTTP status code of 417 to represent this condition. The client, upon detecting the status code, may display appropriate guidance to the user.
 
-![PrezoServer CSRF Process](PrezoServer-CSRF.png)
+#### 2.7 Testing and Validation
+
+A new installation of PrezoServer must provide certain files which support testing and validating the installation. Once the validation has been completed the files may be removed.
+
+#### 2.7.1 Validating client access restrictions to /prezo/support
+
+A literal file named resource-test.html must be placed in /prezo/support/reference/. Per requirements defined in 2.3, any resources under /prezo/support should not be accessible by the client. This is validated by making an attempt to access http(s)://\<server\>:\<port\>/\<document root\>/prezo/support/reference/resource-test.html. Success is the content is not returned and the HTTP response code was a 404 (Not Found). Failure is the content was returned and the HTTP response code was 200 (OK).
+
+The content of this file should indicate that if it can be read then the PrezoServer has not properly implemented the requirements of this specification.
+
+Note: While this does not necessarily prove all resources under /prezo/support have been restricted per the specification, it does help validate that the configuration is most likely in compliance with the specification.
+
+#### 2.7.2 Validating CSRF Protection
+
+The following resource must exist and may be implemented as a literal, virtual, or wrapper file:
+/<document root>/api/csrf-test.html
+
+This file should be accessible to the client. If csrf.js was included by the client then the content of csrf-test.html should be accessible by the client. If the client has not included csrf.js then the appropriate response status code and message should be returned as described in 2.6. 
+
+#### 2.8 Design Documentation
+
+To be considered 100% compliant each PrezoServer implementation must provide design documentation that, at minimum, provides the following information:
+
+1. Step by step procedure for creating the PrezoServer implementation so that it can be reproduced and verified.
+2. Detailed description of how CSRF was implemented. 
+    
+
+
+
 
 
