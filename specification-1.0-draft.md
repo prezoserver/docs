@@ -119,7 +119,7 @@ A new installation of PrezoServer must provide certain files which support testi
 
 #### 2.7.1 Validating client access restrictions to /prezo/support
 
-A literal file named test-resource.html must be placed in /prezo/support/reference/. Per requirements defined in 2.3, any resources under /prezo/support should not be accessible by the client. This is validated by making an attempt to access http(s)://\<server\>:\<port\>/\<document root\>/prezo/support/reference/test-resource.html. Success is the content is not returned and the HTTP response code was a 404 (Not Found). Failure is the content was returned and the HTTP response code was 200 (OK).
+A literal file named test-resource.html must be placed in /prezo/support/test/. Per requirements defined in 2.3, any resources under /prezo/support should not be accessible by the client. This is validated by making an attempt to access http(s)://\<server\>:\<port\>/\<document root\>/prezo/support/reference/test-resource.html. Success is the content is not returned and the HTTP response code was a 404 (Not Found). Failure is the content was returned and the HTTP response code was 200 (OK).
 
 The content of this file should indicate that if it can be read then the PrezoServer has not properly implemented the requirements of this specification.
 
